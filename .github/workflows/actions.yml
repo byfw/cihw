@@ -39,4 +39,25 @@ jobs:
       - name: 'Test *nix'
         if: matrix.os != 'windows-latest'
         run: go test -cover ./...
-
+      - name: Build
+        if: matrix.os == 'windows-latest'
+        run: | 
+          mkdir build 
+          go build -o .\build .\cmd\cihw 
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir build
+          go build -o ./build ./cmd/cihw
+      - name: Archive
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir release
+          Compress-Archive -Path '.\build\*' -DestinationPath '.\release\windows-amd64.zip'
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir release
+          pushd build
+          tar czf ../release/linux-amd64.tar.gz *
+          popd
+      - name: Release
+        run: gh release create --draft --prerelease --title "testing CI" ./release/*
