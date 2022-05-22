@@ -62,4 +62,6 @@ jobs:
           tar czf ../release/linux-amd64.tar.gz *
           popd
       - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create --draft --prerelease --title "testing CI" ./release/*
