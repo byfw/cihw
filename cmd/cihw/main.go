@@ -1,4 +1,4 @@
-package cihw
+package main
 
 import "fmt"
 
