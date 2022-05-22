@@ -39,20 +39,22 @@ jobs:
       - name: 'Test *nix'
         if: matrix.os != 'windows-latest'
         run: go test -cover ./...
-      - name: Build
+      - name: Windows Build
         if: matrix.os == 'windows-latest'
         run: | 
           mkdir build 
           go build -o .\build .\cmd\cihw 
+      - name: '*nix Build'
         if: matrix.os != 'windows-latest'
         run: |
           mkdir build
           go build -o ./build ./cmd/cihw
-      - name: Archive
+      - name: Windows Archive
         if: matrix.os == 'windows-latest'
         run: |
           mkdir release
           Compress-Archive -Path '.\build\*' -DestinationPath '.\release\windows-amd64.zip'
+      - name: '*nix Archive'
         if: matrix.os != 'windows-latest'
         run: |
           mkdir release
